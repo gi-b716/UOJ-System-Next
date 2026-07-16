@@ -7,7 +7,7 @@ services:
     container_name: uoj-db
     restart: always
     volumes:
-      - ./uoj_data/db/mysql:/var/lib/mysql
+      - uoj_mysql_data:/var/lib/mysql
     environment:
       - MYSQL_DATABASE=app_uoj233
       - MYSQL_ROOT_PASSWORD=root
@@ -84,3 +84,6 @@ services:
       - JUDGER_PASSWORD=_judger_password_
       - SOCKET_PORT=2333
       - SOCKET_PASSWORD=_judger_socket_password_
+
+volumes:
+  uoj_mysql_data:
