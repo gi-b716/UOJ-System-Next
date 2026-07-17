@@ -220,7 +220,7 @@ def update_problem_data(problem_id, problem_mtime):
         if os.path.isdir(copy_name):
             quoted_copy_name = pipes.quote(copy_name)
             if os.path.getmtime(copy_name) >= problem_mtime:
-                execute("touch -a %s" % quoted_copy_name)
+                os.system("touch -a %s" % quoted_copy_name)
                 return
             else:
                 execute("chmod 700 %s -R && rm -rf %s" % (quoted_copy_name, quoted_copy_name))
@@ -234,9 +234,10 @@ def update_problem_data(problem_id, problem_mtime):
 
         uoj_download("/problem/%d" % problem_id, copy_zip_name)
         execute(
-            "cd %s && unzip -q %d.zip && rm %d.zip && chmod -w %d -R"
-            % (uoj_judger_path("/data"), problem_id, problem_id, problem_id)
+            "cd %s && unzip -q %d.zip && rm %d.zip"
+            % (uoj_judger_path("/data"), problem_id, problem_id)
         )
+        os.system("chmod -w %s/%d -R 2>/dev/null" % (uoj_judger_path("/data"), problem_id))
     except Exception:
         print_judge_client_status()
         traceback.print_exc()
