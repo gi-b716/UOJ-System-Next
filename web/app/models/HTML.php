@@ -10,7 +10,7 @@ class HTML {
 	public static function avatar_addr($user, $size) {
 		return '//cn.gravatar.com/avatar/' . md5(strtolower(trim($user['email']))) . "?d=mm&amp;s=$size";
 	}
-		
+
 	public static function tablist($tabs_info, $cur, $type = 'nav-tabs') {
 		$html = '<ul class="nav '.$type.'" role="tablist">';
 		foreach ($tabs_info as $id => $tab) {
@@ -19,7 +19,7 @@ class HTML {
 		$html .= '</ul>';
 		return $html;
 	}
-	
+
 	public static function hiddenToken() {
 		return '<input type="hidden" name="_token" value="'.crsf_token().'" />';
 	}
@@ -41,20 +41,23 @@ class HTML {
 		$status = $default_value ? 'checked="checked" ' : '';
 		return '<input type="checkbox" id="'."input-$name".'" name="'.$name.'" '.$status.'/>';
 	}
-	
+
 	public static function blog_url($username, $uri) {
 		switch (UOJConfig::$data['switch']['blog-domain-mode']) {
 			case 1:
-				$port = ((UOJConfig::$data['web']['blog']['protocol'] === "http" && UOJConfig::$data['web']['blog']['port'] == 80) || (UOJConfig::$data['web']['blog']['protocol'] === "https" && UOJConfig::$data['web']['blog']['port'] == 443)) ? '' : (':'.UOJConfig::$data['web']['blog']['port']);
-				$url = UOJConfig::$data['web']['blog']['protocol'].'://'.blog_name_encode($username).'.'.UOJConfig::$data['web']['blog']['host'].$port;
+				$host = UOJConfig::$data['web']['blog']['host'];
+				$port = (strpos($host, ':') !== false || (UOJConfig::$data['web']['blog']['protocol'] === "http" && UOJConfig::$data['web']['blog']['port'] == 80) || (UOJConfig::$data['web']['blog']['protocol'] === "https" && UOJConfig::$data['web']['blog']['port'] == 443)) ? '' : (':'.UOJConfig::$data['web']['blog']['port']);
+				$url = UOJConfig::$data['web']['blog']['protocol'].'://'.blog_name_encode($username).'.'.$host.$port;
 				break;
 			case 2:
-				$port = ((UOJConfig::$data['web']['blog']['protocol'] === "http" && UOJConfig::$data['web']['blog']['port'] == 80) || (UOJConfig::$data['web']['blog']['protocol'] === "https" && UOJConfig::$data['web']['blog']['port'] == 443)) ? '' : (':'.UOJConfig::$data['web']['blog']['port']);
-				$url = UOJConfig::$data['web']['blog']['protocol'].'://'.UOJConfig::$data['web']['blog']['host'].$port.'/'.blog_name_encode($username);
+				$host = UOJConfig::$data['web']['blog']['host'];
+				$port = (strpos($host, ':') !== false || (UOJConfig::$data['web']['blog']['protocol'] === "http" && UOJConfig::$data['web']['blog']['port'] == 80) || (UOJConfig::$data['web']['blog']['protocol'] === "https" && UOJConfig::$data['web']['blog']['port'] == 443)) ? '' : (':'.UOJConfig::$data['web']['blog']['port']);
+				$url = UOJConfig::$data['web']['blog']['protocol'].'://'.$host.$port.'/'.blog_name_encode($username);
 				break;
 			case 3:
-				$port = ((UOJConfig::$data['web']['main']['protocol'] === "http" && UOJConfig::$data['web']['main']['port'] == 80) || (UOJConfig::$data['web']['main']['protocol'] === "https" && UOJConfig::$data['web']['main']['port'] == 443)) ? '' : (':'.UOJConfig::$data['web']['main']['port']);
-				$url = UOJConfig::$data['web']['main']['protocol'].'://'.UOJConfig::$data['web']['main']['host'].$port.'/blog/'.blog_name_encode($username);
+				$host = UOJConfig::$data['web']['main']['host'];
+				$port = (strpos($host, ':') !== false || (UOJConfig::$data['web']['main']['protocol'] === "http" && UOJConfig::$data['web']['main']['port'] == 80) || (UOJConfig::$data['web']['main']['protocol'] === "https" && UOJConfig::$data['web']['main']['port'] == 443)) ? '' : (':'.UOJConfig::$data['web']['main']['port']);
+				$url = UOJConfig::$data['web']['main']['protocol'].'://'.$host.$port.'/blog/'.blog_name_encode($username);
 				break;
 		}
 		$url .= $uri;
@@ -65,35 +68,39 @@ class HTML {
 		switch (UOJConfig::$data['switch']['blog-domain-mode']) {
 			case 1:
 			case 2:
-				$port = ((UOJConfig::$data['web']['blog']['protocol'] === "http" && UOJConfig::$data['web']['blog']['port'] == 80) || (UOJConfig::$data['web']['blog']['protocol'] === "https" && UOJConfig::$data['web']['blog']['port'] == 443)) ? '' : (':'.UOJConfig::$data['web']['blog']['port']);
-				$url = UOJConfig::$data['web']['blog']['protocol'].'://'.UOJConfig::$data['web']['blog']['host'].$port;
+				$host = UOJConfig::$data['web']['blog']['host'];
+				$port = (strpos($host, ':') !== false || (UOJConfig::$data['web']['blog']['protocol'] === "http" && UOJConfig::$data['web']['blog']['port'] == 80) || (UOJConfig::$data['web']['blog']['protocol'] === "https" && UOJConfig::$data['web']['blog']['port'] == 443)) ? '' : (':'.UOJConfig::$data['web']['blog']['port']);
+				$url = UOJConfig::$data['web']['blog']['protocol'].'://'.$host.$port;
 				break;
 			case 3:
-				$port = ((UOJConfig::$data['web']['main']['protocol'] === "http" && UOJConfig::$data['web']['main']['port'] == 80) || (UOJConfig::$data['web']['main']['protocol'] === "https" && UOJConfig::$data['web']['main']['port'] == 443)) ? '' : (':'.UOJConfig::$data['web']['main']['port']);
-				$url = UOJConfig::$data['web']['main']['protocol'].'://'.UOJConfig::$data['web']['main']['host'].$port.'/blogs';
+				$host = UOJConfig::$data['web']['main']['host'];
+				$port = (strpos($host, ':') !== false || (UOJConfig::$data['web']['main']['protocol'] === "http" && UOJConfig::$data['web']['main']['port'] == 80) || (UOJConfig::$data['web']['main']['protocol'] === "https" && UOJConfig::$data['web']['main']['port'] == 443)) ? '' : (':'.UOJConfig::$data['web']['main']['port']);
+				$url = UOJConfig::$data['web']['main']['protocol'].'://'.$host.$port.'/blogs';
 				break;
 		}
 		return HTML::escape(rtrim($url, '/'));
 	}
-	
+
 	public static function url($uri, $config = array()) {
 		$config = array_merge(array(
 			'location' => 'main',
 			'params' => null
 		), $config);
-		
+
 		$path = strtok($uri, '?');
 		$qs = strtok('?');
 		parse_str($qs, $param);
-		
+
 		if ($config['params'] != null) {
 			$param = array_merge($param, $config['params']);
 		}
-		
-		$url = UOJConfig::$data['web'][$config['location']]['protocol'].'://'.UOJConfig::$data['web'][$config['location']]['host'];
-		if ((UOJConfig::$data['web'][$config['location']]['protocol'] === "http" && UOJConfig::$data['web'][$config['location']]['port'] == 80) || (UOJConfig::$data['web'][$config['location']]['protocol'] === "https" && UOJConfig::$data['web'][$config['location']]['port'] == 443)) {
-		} else {
-			$url .= ':'.UOJConfig::$data['web'][$config['location']]['port'];
+
+		$host = UOJConfig::$data['web'][$config['location']]['host'];
+		$url = UOJConfig::$data['web'][$config['location']]['protocol'].'://'.$host;
+		if (strpos($host, ':') === false) {
+			if (!(UOJConfig::$data['web'][$config['location']]['protocol'] === "http" && UOJConfig::$data['web'][$config['location']]['port'] == 80) && !(UOJConfig::$data['web'][$config['location']]['protocol'] === "https" && UOJConfig::$data['web'][$config['location']]['port'] == 443)) {
+				$url .= ':'.UOJConfig::$data['web'][$config['location']]['port'];
+			}
 		}
 		if ($param) {
 			$url .= $path.'?'.HTML::query_string_encode($param);
@@ -116,14 +123,14 @@ class HTML {
 		$url = HTML::escape($url);
 		return $url;
 	}
-	
+
 	public static function js_src($uri, $config = array('location' => 'main')) {
 		return '<script src="'.HTML::url($uri, $config).'"></script>';
 	}
 	public static function css_link($uri, $config = array('location' => 'main')) {
 		return '<link type="text/css" rel="stylesheet" href="'.HTML::url($uri, $config).'" />';
 	}
-	
+
 	public static function query_string_encode($q, $array_name = null) {
 		if (!is_array($q)) {
 			return false;
@@ -145,7 +152,7 @@ class HTML {
 		}
 		return implode("&", $r);
 	}
-	
+
 	public static function pruifier() {
 		include_once $_SERVER['DOCUMENT_ROOT'] . '/app/vendor/htmlpurifier/HTMLPurifier.auto.php';
 		$config = HTMLPurifier_Config::createDefault();
@@ -153,14 +160,14 @@ class HTML {
 		$config->set('Cache.DefinitionImpl', null);
 		$def = $config->getHTMLDefinition(true);
 		$def->addAttribute('span', 'data-rating', 'Number');
-		
+
 		$def->addElement('section', 'Block', 'Flow', 'Common');
 		$def->addElement('nav',     'Block', 'Flow', 'Common');
 		$def->addElement('article', 'Block', 'Flow', 'Common');
 		$def->addElement('aside',   'Block', 'Flow', 'Common');
 		$def->addElement('header',  'Block', 'Flow', 'Common');
 		$def->addElement('footer',  'Block', 'Flow', 'Common');
-		
+
 		return new HTMLPurifier($config);
 	}
 

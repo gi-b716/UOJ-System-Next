@@ -17,12 +17,12 @@ return [
 	'web' => [
 		'domain' => null,
 		'main' => [
-			'protocol' => 'http',
+			'protocol' => UOJContext::httpProtocol(),
 			'host' => '_httpHost_',
 			'port' => 80
 		],
 		'blog' => [
-			'protocol' => 'http',
+			'protocol' => UOJContext::httpProtocol(),
 			'host' => '_httpHost_',
 			'port' => 80
 		]

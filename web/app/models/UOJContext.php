@@ -2,7 +2,7 @@
 
 class UOJContext {
 	public static $data = array();
-	
+
 	public static function pageConfig() {
 		if (!isset(self::$data['type'])) {
 			return array(
@@ -16,18 +16,18 @@ class UOJContext {
 			);
 		}
 	}
-	
+
 	public static function isAjax() {
 		return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
 	}
-	
+
 	public static function contentLength() {
 		if (!isset($_SERVER['CONTENT_LENGTH'])) {
 			return null;
 		}
 		return (int)$_SERVER['CONTENT_LENGTH'];
 	}
-	
+
 	public static function documentRoot() {
 		return $_SERVER['DOCUMENT_ROOT'];
 	}
@@ -61,6 +61,15 @@ class UOJContext {
 			return $_SERVER['SERVER_NAME'].($_SERVER['SERVER_PORT'] == '80' ? '' : ':'.$_SERVER['SERVER_PORT']);
 		}
 	}
+	public static function httpProtocol() {
+		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+			return 'https';
+		} elseif (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+			return 'https';
+		} else {
+			return 'http';
+		}
+	}
 	public static function cookieDomain() {
 		$domain = UOJConfig::$data['web']['domain'];
 		if ($domain === null) {
@@ -74,7 +83,7 @@ class UOJContext {
 		}
 		return $domain;
 	}
-	
+
 	public static function setupBlog() {
 		$username = blog_name_decode($_GET['blog_username']);
 		if (!validateUsername($username) || !(self::$data['user'] = queryUser($username))) {
@@ -85,7 +94,7 @@ class UOJContext {
 		}
 		self::$data['type'] = 'blog';
 	}
-	
+
 	public static function __callStatic($name, array $args) {
 		switch (self::$data['type']) {
 			case 'blog':
